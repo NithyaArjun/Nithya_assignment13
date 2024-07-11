@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Users</title>
+</head>
+<body>
+    <h1>Users</h1>
+
+  <div th:if="${#lists.size(users) == 1}">
+  <div th:object="${user}">
+       
+  <form th:action="@{/users/{userId}/update(userId=${user.userId})}" method="post" th:object="${user}">
+  <div>
+   UserName:  <input type="text" name="username" th:value="${user.username}" placeholder="Username" />
+    </div>
+    <div>
+   Password:  <input type="password" name="password"th:value="${user.password}" placeholder="Password" />
+    </div>
+    <div>
+   Full Name:  <input type="text" name="name" th:value="${user.name}" placeholder="Name" />
+    </div>
+  
+   <div th:object="${user.address}">
+        AddressLine 1: <input type="text" name="address.addressLine1" th:value="${address.addressLine1}" placeholder="Address Line 1" /><br/>
+        AddressLine 2: <input type="text" name="address.addressLine2" th:value="${address.addressLine2}" placeholder="Address Line 2" /><br/>
+        City: <input type="text" name="address.city" th:value="${address.city}" placeholder="City" /><br/>
+        Region: <input type="text" name="address.region" th:value="${address.region}" placeholder="Region" /><br/>
+        Country: <input type="text" name="address.country" th:value="${address.country}" placeholder="Country" /><br/>
+        ZipCode: <input type="text" name="address.zipCode" th:value="${address.zipCode}" placeholder="Zip Code" /><br/>
+    </div>
+	<div>
+	 <input type="submit" value="Update User Account" />
+	 </div>
+</form>
+   <form th:action="@{/users/{userId}/delete(userId=${user.userId})}" method="post">
+        <input type="submit" value="Delete User Account" />
+     </form>
+     
+   
+   <div th:object="${user.accounts}">
+    <h1>Accounts</h1>
+    <!-- Check if accounts is not empty -->
+   <div th:if="${#lists.isEmpty(user.accounts)}">
+    <p>No accounts found.</p>
+    <!-- Optionally, display a link to create a new account -->
+
+</div>
+<div th:if="${not #lists.isEmpty(user.accounts)}">
+    
+       <div th:each="account : ${user.accounts}">
+            <span th:text="${account.accountName}"></span>
+        </div>
+    </div>
+   
+</div>
+ <form th:action="@{/users/{userId}/accounts(userId=${user.userId})}"  method="post">
+        <input type="submit" value="Create New Account"/>
+    </form>
+</div>
+</div>
+
+    <div th:unless="${#lists.size(users) == 1}" th:each="user : ${users}">
+        <a th:href="@{/users/{userId}(userId=${user.userId})}" th:text="${user.userId}"></a><br />
+        <span th:text="${user.username}"></span><br />
+        <span th:text="${user.name}"></span><br />
+        <span th:text="${user.password}"></span>
+        <div th:each="account : ${user.accounts}">
+            <a th:href="@{/users/{userId}/account/{accountId}(userId=${user.userId}, accountId=${account.accountId})}" th:text="${account.accountName}"></a>
+        </div>
+        <hr />
+    </div>
+</body>
+</html>
