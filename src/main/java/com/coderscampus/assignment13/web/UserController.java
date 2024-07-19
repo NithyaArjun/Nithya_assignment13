@@ -58,8 +58,10 @@ public class UserController {
 		model.put("users", users);
 
 		if (users.size() == 1) {
-			model.put("user", users.iterator().next());
-		}
+			 User user = users.iterator().next();
+		        model.put("user", user);
+		        model.put("address", user.getAddress() != null ? user.getAddress() : new Address());
+		    }
 
 		return "users";
 	}

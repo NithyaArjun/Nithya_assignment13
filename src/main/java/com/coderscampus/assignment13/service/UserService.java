@@ -81,12 +81,12 @@ public class UserService {
 		return userRepo.save(user);
 	}
 
-	public void delete(Long userId) {
-		System.out.println(userId);
-		userRepo.deleteById(userId);
-		System.out.println("deleted successfully");
-	}
-
+	@Transactional
+    public void delete(Long userId) {
+        User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        userRepo.delete(user);
+        System.out.println("Deleted user with ID: " + userId);
+    }
 	@Transactional
 	public User updateUserAndAddress(Long userId, User user) {
 
